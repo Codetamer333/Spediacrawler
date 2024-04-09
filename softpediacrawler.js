@@ -28,7 +28,7 @@ puppeteer.use(StealthPlugin());
   const categoryMappings = {
     "Windows Apps": [
       "https://www.softpedia.com/get/Antivirus/",
-      "https://www.softpedia.com/get/Authoring-tools/",
+      // "https://www.softpedia.com/get/Authoring-tools/",
       // "https://www.softpedia.com/get/CD-DVD-Tools/",
       // "https://www.softpedia.com/get/Compression-tools/",
       // "https://www.softpedia.com/get/Desktop-Enhancements/",
@@ -203,11 +203,11 @@ puppeteer.use(StealthPlugin());
     }
     for (const url of urls) {
       await page.goto(url, { waitUntil: "networkidle2" });
-      const maxPageElement = await page.$eval('a[title="Navigate to last page"]', (a) => a.textContent.trim());
+      // const maxPageElement = await page.$eval('a[title="Navigate to last page"]', (a) => a.textContent.trim());
       let maxPageNumber = 1;
-      if (maxPageElement) {
-          maxPageNumber = parseInt(maxPageElement.match(/\d+$/)[0], 10);
-      }
+      // if (maxPageElement) {
+      //     maxPageNumber = parseInt(maxPageElement.match(/\d+$/)[0], 10);
+      // }
       console.log(`Total number of pages for category ${categoryName}: ${maxPageNumber}` );
       for (let pageNumber = 1; pageNumber <= maxPageNumber; pageNumber++) {
         const pageUrl = pageNumber === 1 ? url : `${url}/index${pageNumber}.shtml`;
