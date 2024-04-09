@@ -9,7 +9,7 @@ const { JSDOM } = require("jsdom");
 puppeteer.use(StealthPlugin());
 (async () => {
   const browser = await puppeteer.launch({
-    headless: true,
+    headless: false,
     timeout: 100000,
   });
   const page = await browser.newPage();
@@ -150,13 +150,23 @@ puppeteer.use(StealthPlugin());
              }
             // let downloadLink;
             // if (appInfo.License == "Free") {
-              const linkDeDownload = `${appLink}#download`;
-              console.log(`Link de download: ${linkDeDownload}`);
-              await page.goto(linkDeDownload, {
-                waitUntil: "networkidle2",
-                timeout: 100000,
+              // const linkDeDownload = `${appLink}#download`;
+              // console.log(`Link de download: ${linkDeDownload}`);
+              // await page.goto(linkDeDownload, {
+              //   waitUntil: "networkidle2",
+              //   timeout: 100000,
+              // });
+              // await page.waitForSelector('a[title="DOWNLOAD: External Mirror"]', {
+              //   visible: true,  // Ensures the element is not only present but also visible
+              //   timeout: 10000   // Waits up to 5000 milliseconds (optional, adjust as needed)
+              // });
+              await page.waitForSelector('#dlbtn1 a[itemprop="downloadUrl"]', { visible: true });
+              await page.click('#dlbtn1 a[itemprop="downloadUrl"]');
+              await page.waitForSelector('div.dllinkbox2', {
+                visible: true,  // Ensures the element is not only present but also visible
+                timeout: 10000   // Waits up to 5000 milliseconds (optional, adjust as needed)
               });
-              const downloadLink = await page.$eval('a[title="DOWNLOAD: External Mirror"]', (a) => a.href );
+              const downloadLink = await page.$eval('.dllinkbox2 a', a => a.href);
               console.log(`Download link: ${downloadLink}`);
             //   const appLink2 = await page.evaluate(async () => {
             //     const directDownloadLinkSelector2 =document.querySelector( "section.download-module a.s-button-app.s-button-app--large.s-button-app--primary.button-download-direct.js-button-loading.js-launch-download.js-older-versions-button-download" )?.href || "no link";
@@ -179,7 +189,7 @@ puppeteer.use(StealthPlugin());
       }
     }
   }
-  await browser.close();
+  // await browser.close();
 })();
 
 // async function downloadFile(fileUrl, outputPath) {
