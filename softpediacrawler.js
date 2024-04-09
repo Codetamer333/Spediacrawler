@@ -9,7 +9,7 @@ const { JSDOM } = require("jsdom");
 puppeteer.use(StealthPlugin());
 (async () => {
   const browser = await puppeteer.launch({
-    headless: false,
+    headless: true,
     timeout: 100000,
   });
   const page = await browser.newPage();
@@ -34,140 +34,7 @@ puppeteer.use(StealthPlugin());
       // "https://www.softpedia.com/get/Desktop-Enhancements/",
       // "https://en.softonic.com/windows/ai-video-generator-editor:date",
       // "https://en.softonic.com/windows/ai-writing-assistant:date",
-    ],
-    // "Browsers": [
-    //   "https://en.softonic.com/windows/add-ons-tools:new-apps",
-    //   "https://en.softonic.com/windows/web-browsers:new-apps",
-    // ],
-    // "Security & Privacy": [
-    //   "https://en.softonic.com/windows/access-control:new-apps",
-    //   "https://en.softonic.com/windows/ad-blockers:new-apps",
-    //   "https://en.softonic.com/windows/anti-spam-anti-spy:new-apps",
-    //   "https://en.softonic.com/windows/antivirus:new-apps",
-    //   "https://en.softonic.com/windows/encryption:new-apps",
-    //   "https://en.softonic.com/windows/firewalls:new-apps",
-    //   "https://en.softonic.com/windows/keyloggers:new-apps",
-    //   "https://en.softonic.com/windows/password-management:new-apps",
-    //   "https://en.softonic.com/windows/vpn:new-apps",
-    // ],
-    // "Business & Productivity": [
-    //   "https://en.softonic.com/windows/accounting:new-apps",
-    //   "https://en.softonic.com/windows/agenda-calendars:new-apps",
-    //   "https://en.softonic.com/windows/banking-atm:new-apps",
-    //   "https://en.softonic.com/windows/calculators-converters:new-apps",
-    //   "https://en.softonic.com/windows/document-management:new-apps",
-    //   "https://en.softonic.com/windows/e-mail-clients:new-apps",
-    //   "https://en.softonic.com/windows/finance:new-apps",
-    //   "https://en.softonic.com/windows/office-suites:new-apps",
-    //   "https://en.softonic.com/windows/personal-finance-management:new-apps",
-    //   "https://en.softonic.com/windows/project-management:new-apps",
-    //   "https://en.softonic.com/windows/remote-pc:new-apps",
-    // ],
-    // "Internet & Network": [
-    //   "https://en.softonic.com/windows/download-managers:new-apps",
-    //   "https://en.softonic.com/windows/file-sharing-peer-to-peer:new-apps",
-    //   "https://en.softonic.com/windows/search-lookup-tools:new-apps",
-    //   "https://en.softonic.com/windows/wifi:new-apps",
-    // ],
-    // "Multimedia": [
-    //   "https://en.softonic.com/windows/audio:new-apps",
-    //   "https://en.softonic.com/windows/burning:new-apps",
-    //   "https://en.softonic.com/windows/graphic-design:new-apps",
-    //   "https://en.softonic.com/windows/movies-tv:new-apps",
-    //   "https://en.softonic.com/windows/music-radio:new-apps",
-    //   "https://en.softonic.com/windows/photography:new-apps",
-    //   "https://en.softonic.com/windows/streaming-videos:new-apps",
-    //   "https://en.softonic.com/windows/video:new-apps",
-    // ],
-    // "Development & IT": [
-    //   "https://en.softonic.com/windows/backup-cloud-storage:new-apps",
-    //   "https://en.softonic.com/windows/database:new-apps",
-    //   "https://en.softonic.com/windows/development-kits:new-apps",
-    //   "https://en.softonic.com/windows/ftp-clients:new-apps",
-    //   "https://en.softonic.com/windows/ides-source-editors:new-apps",
-    //   "https://en.softonic.com/windows/manual-tutorials:new-apps",
-    //   "https://en.softonic.com/windows/networking:new-apps",
-    //   "https://en.softonic.com/windows/programming-languages:new-apps",
-    //   "https://en.softonic.com/windows/remote-control:new-apps",
-    //   "https://en.softonic.com/windows/servers:new-apps",
-    //   "https://en.softonic.com/windows/web-development:new-apps",
-    // ],
-    // "Education & Reference": [
-    //   "https://en.softonic.com/windows/books:new-apps",
-    //   "https://en.softonic.com/windows/catalogs:new-apps",
-    //   "https://en.softonic.com/windows/dictionaries:new-apps",
-    //   "https://en.softonic.com/windows/e-readers:new-apps",
-    //   "https://en.softonic.com/windows/geography:new-apps",
-    //   "https://en.softonic.com/windows/languages-translation:new-apps",
-    //   "https://en.softonic.com/windows/magazines-newspapers:new-apps",
-    //   "https://en.softonic.com/windows/medicine:new-apps",
-    //   "https://en.softonic.com/windows/science:new-apps",
-    //   "https://en.softonic.com/windows/teaching-training:new-apps",
-    // ],
-    // "Lifestyle": [
-    //   "https://en.softonic.com/windows/fashion-style:new-apps",
-    //   "https://en.softonic.com/windows/food-drink:new-apps",
-    //   "https://en.softonic.com/windows/grocery-lists:new-apps",
-    //   "https://en.softonic.com/windows/health-fitness:new-apps",
-    //   "https://en.softonic.com/windows/hobbies:new-apps",
-    //   "https://en.softonic.com/windows/medical:new-apps",
-    //   "https://en.softonic.com/windows/product-reviews-comparison:new-apps",
-    //   "https://en.softonic.com/windows/shopping:new-apps",
-    //   "https://en.softonic.com/windows/sports:new-apps",
-    //   "https://en.softonic.com/windows/ticketing-service:new-apps",
-    //   "https://en.softonic.com/windows/weather:new-apps",
-    //   "https://en.softonic.com/windows/workout:new-apps",
-    // ],
-    // " Personalization": [
-    //   "https://en.softonic.com/windows/cursors-fonts:new-apps",
-    //   "https://en.softonic.com/windows/ringtones-sounds:new-apps",
-    //   "https://en.softonic.com/windows/screen-lockers:new-apps",
-    //   "https://en.softonic.com/windows/screen-savers:new-apps",
-    //   "https://en.softonic.com/windows/themes:new-apps",
-    //   "https://en.softonic.com/windows/wallpaper:new-apps",
-    // ],
-    // "Social & Communication": [
-    //   "https://en.softonic.com/windows/blog:new-apps",
-    //   "https://en.softonic.com/windows/chat-instant-messaging:new-apps",
-    //   "https://en.softonic.com/windows/photo-video-sharing:new-apps",
-    //   "https://en.softonic.com/windows/social-networking:new-apps",
-    // ],
-    // "Travel & Navigation": [
-    //   "https://en.softonic.com/windows/maps-gps:new-apps",
-    //   "https://en.softonic.com/windows/trip-management:new-apps",
-    // ],
-    // "Utilities & Tools ": [
-    //   "https://en.softonic.com/windows/bar-code-scanning:new-apps",
-    //   "https://en.softonic.com/windows/clocks-alarms:new-apps",
-    //   "https://en.softonic.com/windows/data-recovery:new-apps",
-    //   "https://en.softonic.com/windows/file-compression:new-apps",
-    //   "https://en.softonic.com/windows/file-managers:new-apps",
-    //   "https://en.softonic.com/windows/keyboards:new-apps",
-    //   "https://en.softonic.com/windows/measurement:new-apps",
-    //   "https://en.softonic.com/windows/printer-fax:new-apps",
-    //   "https://en.softonic.com/windows/screen-capture:new-apps",
-    // ],
-    // "Games for Windows": [
-    //  "https://en.softonic.com/windows/adventure:new-apps",
-    //  "https://en.softonic.com/windows/action:new-apps",
-    // "https://en.softonic.com/windows/arcade:new-apps",
-    //  "https://en.softonic.com/windows/board:new-apps",
-    //  "https://en.softonic.com/windows/card:new-apps",
-    // "https://en.softonic.com/windows/casino:new-apps",
-    //  "https://en.softonic.com/windows/educational:new-apps",
-    //  "https://en.softonic.com/windows/family:new-apps",
-    //  "https://en.softonic.com/windows/family:new-apps",
-    //  "https://en.softonic.com/windows/music:new-apps",
-    // "https://en.softonic.com/windows/puzzle:new-apps",
-    //  "https://en.softonic.com/windows/racing:new-apps",
-    //  "https://en.softonic.com/windows/role-playing:new-apps",
-    //  "https://en.softonic.com/windows/simulation:new-apps",
-    //  "https://en.softonic.com/windows/sport-games:new-apps",
-    //  "https://en.softonic.com/windows/strategy:new-apps",
-    //  "https://en.softonic.com/windows/trivia:new-apps",
-    //  "https://en.softonic.com/windows/utilities:new-apps",
-    //  "https://en.softonic.com/windows/word",
-    // ],
+    ]
   };
   // function removeAllClasses(htmlString) {
   //   const dom = new JSDOM(htmlString, "text/html");
@@ -189,10 +56,10 @@ puppeteer.use(StealthPlugin());
   //   let cleanedHtmlString = modifiedHtmlString.replace(  /<\/?(html|head|body|div|svg|use)>|\n/g,"" );
   //   return cleanedHtmlString;
   // }
-  // const hasExeFile = (folderPath) => {
-  //   const files = fs.readdirSync(folderPath);
-  //   return files.some((file) => file.endsWith(".exe"));
-  // };
+  const hasExeFile = (folderPath) => {
+    const files = fs.readdirSync(folderPath);
+    return files.some((file) => file.endsWith(".exe"));
+  };
   for (const [categoryName, urls] of Object.entries(categoryMappings)) {
     const categoryFolderPath = path.join(__dirname, "Downloads", categoryName);
     if (!fs.existsSync(categoryFolderPath)) {
@@ -283,22 +150,25 @@ puppeteer.use(StealthPlugin());
              }
             // let downloadLink;
             // if (appInfo.License == "Free") {
-            //   const linkDeDownload = appInfo.downloadLink
-            //   await page.goto(linkDeDownload, {
-            //     waitUntil: "networkidle2",
-            //     timeout: 100000,
-            //   });
+              const linkDeDownload = `${appLink}#download`;
+              console.log(`Link de download: ${linkDeDownload}`);
+              await page.goto(linkDeDownload, {
+                waitUntil: "networkidle2",
+                timeout: 100000,
+              });
+              const downloadLink = await page.$eval('a[title="DOWNLOAD: External Mirror"]', (a) => a.href );
+              console.log(`Download link: ${downloadLink}`);
             //   const appLink2 = await page.evaluate(async () => {
             //     const directDownloadLinkSelector2 =document.querySelector( "section.download-module a.s-button-app.s-button-app--large.s-button-app--primary.button-download-direct.js-button-loading.js-launch-download.js-older-versions-button-download" )?.href || "no link";
             //     return { directDownloadLinkSelector2 };
             //   });
             //    downloadLink = appLink2.directDownloadLinkSelector2; 
-            //    if (!hasExeFile(appFolderPath)){
-            //     await downloadFile(downloadLink, appFolderPath);
-            //     console.log(`Saved or updated app data for ${appInfo.title}`);
-            //   } else {
-            //     console.log(`App file for ${appInfo.title} already exists`);
-            //   }
+              //  if (!hasExeFile(appFolderPath)){
+              //   await downloadFile(downloadLink, appFolderPath);
+              //   console.log(`Saved or updated app data for ${appInfo.title}`);
+              // } else {
+              //   console.log(`App file for ${appInfo.title} already exists`);
+              // }
             // }
           
           } catch (error) {
