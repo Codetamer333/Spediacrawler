@@ -9,7 +9,7 @@ const { JSDOM } = require("jsdom");
 puppeteer.use(StealthPlugin());
 (async () => {
   const browser = await puppeteer.launch({
-    headless: true,
+    headless: false,
     timeout: 100000,
     args: ['--window-size=1920,1080']
   });
@@ -91,6 +91,21 @@ puppeteer.use(StealthPlugin());
         await page.close();
         for (const appLink of appLinks) {
           const softwarePage = await browser.newPage();
+          await softwarePage.setRequestInterception(true);
+            //  page.on("request", (request) => {
+            //     if (request.resourceType() === "document") {
+            //     capturedHeaders = request.headers();
+            //     page.removeAllListeners("request");
+            //     }
+            // });
+            softwarePage.on('request', interceptedRequest => {
+                console.log('Intercepted Request URL:', interceptedRequest.url());
+                // Here, you can inspect the request URL and decide what to do with it
+                // For example, if it matches your criteria for the desired download URL,
+                // you can process it accordingly.
+                
+                interceptedRequest.continue(); // Do not forget to continue the requests
+              });
           try {
             await softwarePage.goto(appLink, { waitUntil: "networkidle2" });
             await softwarePage.setTime
@@ -178,17 +193,36 @@ puppeteer.use(StealthPlugin());
               });
               const downloadLink = await softwarePage.$eval('div.dllinkbox2 a', a => a.href);
               console.log(`Download link: ${downloadLink}`);
-               if (!hasExeFile(appFolderPath)){
-                await downloadFile(downloadLink, appFolderPath);
-                console.log(`Saved or updated app data for ${appInfo.title}`);
-              } else {
-                console.log(`App file for ${appInfo.title} already exists`);
-              }
+              await softwarePage.close();
+              const softwarePage2 = await browser.newPage();
+              await softwarePage2.setRequestInterception(true);
+                //  page.on("request", (request) => {
+                //     if (request.resourceType() === "document") {
+                //     capturedHeaders = request.headers();
+                //     page.removeAllListeners("request");
+                //     }
+                // });
+                softwarePage2.on('request', interceptedRequest => {
+                    console.log('Intercepted Request URL:', interceptedRequest.url());
+                    // Here, you can inspect the request URL and decide what to do with it
+                    // For example, if it matches your criteria for the desired download URL,
+                    // you can process it accordingly.
+                    
+                    interceptedRequest.continue(); // Do not forget to continue the requests
+                  });
+              await softwarePage2.goto(downloadLink, { waitUntil: "networkidle2" });
+            //    if (!hasExeFile(appFolderPath)){
+            //     await downloadFile(downloadLink, appFolderPath);
+            //     console.log(`Saved or updated app data for ${appInfo.title}`);
+            //   } else {
+            //     console.log(`App file for ${appInfo.title} already exists`);
+            //   }
             // }
-            await softwarePage.close();
+            console.log("Finished one software"); 
+            // await softwarePage.close();
           } catch (error) {
             console.error(`Failed to scrape ${appLink}: ${error}`);
-            await softwarePage.close();
+            // await softwarePage.close();
             continue;
            }
         }
