@@ -57,10 +57,10 @@ puppeteer.use(StealthPlugin());
   //   let cleanedHtmlString = modifiedHtmlString.replace(  /<\/?(html|head|body|div|svg|use)>|\n/g,"" );
   //   return cleanedHtmlString;
   // }
-  const hasExeFile = (folderPath) => {
-    const files = fs.readdirSync(folderPath);
-    return files.some((file) => file.endsWith(".exe"));
-  };
+//   const hasExeFile = (folderPath) => {
+//     const files = fs.readdirSync(folderPath);
+//     return files.some((file) => file.endsWith(".exe"));
+//   };
   for (const [categoryName, urls] of Object.entries(categoryMappings)) {
     const categoryFolderPath = path.join(__dirname, "Downloads", categoryName);
     if (!fs.existsSync(categoryFolderPath)) {
