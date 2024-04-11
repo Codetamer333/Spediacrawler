@@ -9,7 +9,7 @@ const { JSDOM } = require("jsdom");
 puppeteer.use(StealthPlugin());
 (async () => {
   const browser = await puppeteer.launch({
-    headless: false,
+    headless: true,
     timeout: 100000,
     args: ['--window-size=1920,1080']
   });
@@ -91,21 +91,21 @@ puppeteer.use(StealthPlugin());
         await page.close();
         for (const appLink of appLinks) {
           const softwarePage = await browser.newPage();
-          await softwarePage.setRequestInterception(true);
-            //  page.on("request", (request) => {
-            //     if (request.resourceType() === "document") {
-            //     capturedHeaders = request.headers();
-            //     page.removeAllListeners("request");
-            //     }
-            // });
-            softwarePage.on('request', interceptedRequest => {
-                console.log('Intercepted Request URL:', interceptedRequest.url());
-                // Here, you can inspect the request URL and decide what to do with it
-                // For example, if it matches your criteria for the desired download URL,
-                // you can process it accordingly.
+          // await softwarePage.setRequestInterception(true);
+          //   //  page.on("request", (request) => {
+          //   //     if (request.resourceType() === "document") {
+          //   //     capturedHeaders = request.headers();
+          //   //     page.removeAllListeners("request");
+          //   //     }
+          //   // });
+          //   softwarePage.on('request', interceptedRequest => {
+          //       console.log('Intercepted Request URL:', interceptedRequest.url());
+          //       // Here, you can inspect the request URL and decide what to do with it
+          //       // For example, if it matches your criteria for the desired download URL,
+          //       // you can process it accordingly.
                 
-                interceptedRequest.continue(); // Do not forget to continue the requests
-              });
+          //       interceptedRequest.continue(); // Do not forget to continue the requests
+          //     });
           try {
             await softwarePage.goto(appLink, { waitUntil: "networkidle2" });
             await softwarePage.setTime
@@ -203,11 +203,21 @@ puppeteer.use(StealthPlugin());
                 //     }
                 // });
                 softwarePage2.on('request', interceptedRequest => {
-                    console.log('Intercepted Request URL:', interceptedRequest.url());
-                    // Here, you can inspect the request URL and decide what to do with it
-                    // For example, if it matches your criteria for the desired download URL,
-                    // you can process it accordingly.
                     
+                    const requestHeaders = interceptedRequest.headers();
+                    const refersFromSoftpedia = requestHeaders['referer'] && requestHeaders['referer'].includes(downloadLink);
+                    // const refersFromSoftpedia2 = requestHeaders['range']
+                    // const refersFromSoftpedia3 = requestHeaders['connection'] &&  requestHeaders['connection'].includes('keep-alive'); 
+                  if (refersFromSoftpedia) {
+                    // console.log('Intercepted Request URL:', interceptedRequest.url());
+                    axios.head(interceptedRequest.url()).then(response => {
+                          if (response.headers['content-type'] && response.headers['content-type'].includes('application/')) {
+                             console.log('Confirmed download URL based on Content-Type:', interceptedRequest.url());
+                          }
+                   }).catch(error => console.error('Error fetching URL:', error));
+
+                  }
+                
                     interceptedRequest.continue(); // Do not forget to continue the requests
                   });
               await softwarePage2.goto(downloadLink, { waitUntil: "networkidle2" });
