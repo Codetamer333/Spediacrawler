@@ -63,45 +63,30 @@ puppeteer.use(StealthPlugin());
             await softwarePage.goto(appLink, { waitUntil: "networkidle2" });
             const subcategoryItem = await softwarePage.$eval(  "dl.pspec2015.mgtop_10 dd.ellip a", (a) => a.textContent );
             const Developer = await softwarePage.$eval('dl.pspec2015.mgtop_10 a[rel="nofollow"]', (a) => a.textContent.trim());
+            const imageLinks = await softwarePage.$$eval('div.slide a', links => links.map(link => link.href));
             console.log(Developer);
             const appInfo = await softwarePage.evaluate(async () => {
               const title =document.querySelector("div.grid_48 h1.grid_44")?.innerText.trim() || "No title";
               const License =document.querySelector("div.grid_15 dd.long span.bold")?.innerText.trim() || "PAID";
               const Version =document.querySelector("div.verspot h2.sanscond")?.innerText.trim() || "";
-              // const LatestUpdate =document.querySelector(".app-specs__list > li:nth-child(3) p")?.innerText.trim() || "";
-              // const Platform =document.querySelector(".app-specs__list > li:nth-child(4) p")?.innerText.trim() || "";
+              const LatestUpdate =document.querySelector("div.grid_48 span.datemodif")?.innerText.trim() || "";
               const OS =document.querySelector("dl.pspec2015.mgtop_10 dd.multiline span")?.innerText.trim() || "";
-              // const Language =document.querySelector(".app-specs__list > li:nth-child(6) p")?.innerText.trim() || "";
-              // const Downloads =document.querySelector(".app-specs__list > li:nth-child(7) p")?.innerText.trim() || "";
-              // const Subcategory =document.querySelector("dl.pspec2015.mgtop_10 dd.ellip a")?.innerText.trim() || "";
               const developerLink =document.querySelector("dl.pspec2015.mgtop_10 dt.upcase.hp a")?.href || "no dev link";
               const descriptionElement =document.querySelectorAll("p.mgbot_10");
               const descriptionArray = Array.from(descriptionElement).map(element => element.outerHTML).join("") || "No description";
-              // const imageLinks = [
-              //   document.querySelector("a.app-gallery__link img.app-gallery__cover" )?.src || "No image link",
-              //   document.querySelector("ul.is-hidden > li:nth-child(1) a")?.href || "No image link",
-              //   document.querySelector("ul.is-hidden > li:nth-child(2) a")?.href || "No image link",
-              //   document.querySelector("ul.is-hidden > li:nth-child(3) a")?.href || "No image link",
-              // ];
-              const imageLink = document.querySelector("div.scroverflow img" )?.src || "No image link"
               const imageLogo =document.querySelector("div.grid_48 img.h1icon")?.src || "No image link";
-              // const downloadLink =document.querySelector("div#cs2081-sticky-download-button a")?.href || "No download link";
               const specsArray = [
                 `License: ${License}`,
                 `Version: ${Version}`,
-                // `LatestUpdate: ${LatestUpdate}`,
-                // `Platform: ${Platform}`,
+                `LatestUpdate: ${LatestUpdate}`,
                 `OS: ${OS}`,
-                // `Language: ${Language}`,
-                // `Downloads: ${Downloads}`,
+                `Language: EN`,
               ];
-              return { title, descriptionArray,imageLogo, imageLink, developerLink, specsArray, License};
+              return { title, descriptionArray,imageLogo, developerLink, specsArray};
             });
-            // console.log(appInfo.title,  appInfo.imageLink, appInfo.imageLogo); 
-            // console.log(appInfo.developerLink);
-            // console.log(appInfo.specsArray);
             appInfo.Developer = Developer;
             appInfo.subcategoryItem = subcategoryItem;
+            appInfo.imageLinks = imageLinks;
             allAppsInfo.push(appInfo);
             const subcategoryFolderPath = path.join(categoryFolderPath, appInfo.subcategoryItem);
             const firstLetter = appInfo.title[0].toUpperCase();
@@ -131,11 +116,9 @@ puppeteer.use(StealthPlugin());
                 timeout: 10000   
               });
               const linkDeDownload = await softwarePage.$eval('div.dllinkbox2 a', a => a.href);
-              console.log(`Download link: ${linkDeDownload}`);
               await softwarePage.goto(linkDeDownload, { waitUntil: "networkidle2" });
               await softwarePage.waitForSelector('#manstart a[rel="nofollow"]', { visible: true });
               const trueDownloadLink = await softwarePage.$eval('#manstart a[rel="nofollow"]', (a) => a.href );
-              console.log(`True download link: ${trueDownloadLink}`);
                if (!hasExeFile(appFolderPath)){
                 await downloadFile(trueDownloadLink, appFolderPath);
                 console.log(`Saved or updated app data for ${appInfo.title}`);
