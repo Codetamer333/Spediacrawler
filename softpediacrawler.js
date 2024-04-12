@@ -45,10 +45,11 @@ puppeteer.use(StealthPlugin());
           maxPageNumber = parseInt(maxPageElement.match(/\d+$/)[0], 10);
       }
       console.log(`Total number of pages for category ${categoryName}: ${maxPageNumber}` );
-      for (let pageNumber = 1; pageNumber <= maxPageNumber; pageNumber++) {
-        const pageUrl = pageNumber === 1 ? url : `${url}/index${pageNumber}.shtml`;
+      for (let pageNumber = 2; pageNumber <= maxPageNumber; pageNumber++) {
+        // const pageUrl = pageNumber === 1 ? url : `${url}index${pageNumber}.shtml`;
+        const pageUrl = `${url}index${pageNumber}.shtml`;
         console.log(`Crawling page ${pageUrl}`);
-        await page.goto(pageUrl, { waitUntil: "networkidle2" });
+        await page.goto(pageUrl, { waitUntil: "networkidle0" });
         try {
           await page.waitForSelector('div.qc-cmp2-footer-overlay button.css-sw3gic', { timeout: 5000 });
           await page.click('div.qc-cmp2-footer-overlay button.css-sw3gic');
