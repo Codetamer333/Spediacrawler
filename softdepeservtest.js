@@ -10,20 +10,24 @@ puppeteer.use(StealthPlugin());
   const browser = await puppeteer.launch({
     headless: true,
     timeout: 100000,
-    args: ['--window-size=1920,1080']
+    args:
+    [
+        '--no-sandbox',
+        '--disable-setuid-sandbox'
+    ]
   });
   const page = await browser.newPage();
   const allAppsInfo = [];
   const categoryMappings = {
     "Windows Apps": [
-      "https://www.softpedia.com/get/Antivirus/",
-      // "https://www.softpedia.com/get/Authoring-tools/",
-      // "https://www.softpedia.com/get/CD-DVD-Tools/",
-      // "https://www.softpedia.com/get/Compression-tools/",
-      // "https://www.softpedia.com/get/Desktop-Enhancements/",
-     'https://www.softpedia.com/get/File-managers/',
-     'https://www.softpedia.com/get/Gaming-Related/',
-     'https://www.softpedia.com/get/Artificial-Intelligence-Generative-AI/',
+    //  "https://www.softpedia.com/get/Antivirus/",
+    // "https://www.softpedia.com/get/Authoring-tools/",
+     //  "https://www.softpedia.com/get/CD-DVD-Tools/",
+     //  "https://www.softpedia.com/get/Compression-tools/",
+     //  "https://www.softpedia.com/get/Desktop-Enhancements/",
+      // 'https://www.softpedia.com/get/File-managers/',
+    // 'https://www.softpedia.com/get/Gaming-Related/',
+     "https://www.softpedia.com/get/Artificial-Intelligence-Generative-AI/",
      'https://www.softpedia.com/get/Internet/',
      'https://www.softpedia.com/get/IPOD-TOOLS/',
      'https://www.softpedia.com/get/Maps-GPS/',
@@ -48,17 +52,27 @@ puppeteer.use(StealthPlugin());
     }
     for (const url of urls) {
       await page.goto(url, { waitUntil: "networkidle2" });
-      const maxPageElement = await page.$eval('a[title="Navigate to last page"]', (a) => a.textContent.trim());
+    //   const maxPageElement = await page.$eval('a[title="Navigate to last page"]', (a) => a.textContent.trim());
       let maxPageNumber = 1;
-      if (maxPageElement) {
-          maxPageNumber = parseInt(maxPageElement.match(/\d+$/)[0], 10);
+      try {
+        const maxPageElement = await page.$eval('a[title="Navigate to last page"]', a => a.textContent.trim());
+        if (maxPageElement) {
+            maxPageNumber = parseInt(maxPageElement.match(/\d+$/)[0], 10);
+        }
+      } catch (error) {
+        console.error("Pagination element not found, defaulting to one page:", error);
       }
+    //   if (maxPageElement) {
+    //       maxPageNumber = parseInt(maxPageElement.match(/\d+$/)[0], 10);
+    //   } else {
+    //     maxPageNumber = 1;
+    //   }
       console.log(`Total number of pages for category ${categoryName}: ${maxPageNumber}` );
-      for (let pageNumber = 2; pageNumber <= maxPageNumber; pageNumber++) {
-        // const pageUrl = pageNumber === 1 ? url : `${url}index${pageNumber}.shtml`;
-        const pageUrl = `${url}index${pageNumber}.shtml`;
+      for (let pageNumber = 1; pageNumber <= maxPageNumber; pageNumber++) {
+           const pageUrl = pageNumber === 1 ? url : `${url}index${pageNumber}.shtml`;
+       // const pageUrl = `${url}index${pageNumber}.shtml`;
         console.log(`Crawling page ${pageUrl}`);
-        await page.goto(pageUrl, { waitUntil: "networkidle0" });
+        await page.goto(pageUrl, { waitUntil: 'domcontentloaded' });
         try {
           await page.waitForSelector('div.qc-cmp2-footer-overlay button.css-sw3gic', { timeout: 5000 });
           await page.click('div.qc-cmp2-footer-overlay button.css-sw3gic');
@@ -66,7 +80,7 @@ puppeteer.use(StealthPlugin());
           console.error("Privacy modal not found or failed to click Agree:", error);
         }
         const appLinks = await page.$$eval( "div.grid_48 h4.ln a", (links) => links.map((a) => a.href) );
-        await page.close();
+       // await page.close();
         for (const appLink of appLinks) {
           const softwarePage = await browser.newPage();
           try {
@@ -74,7 +88,6 @@ puppeteer.use(StealthPlugin());
             const subcategoryItem = await softwarePage.$eval(  "dl.pspec2015.mgtop_10 dd.ellip a", (a) => a.textContent );
             const Developer = await softwarePage.$eval('dl.pspec2015.mgtop_10 a[rel="nofollow"]', (a) => a.textContent.trim());
             const imageLinks = await softwarePage.$$eval('div.slide a', links => links.map(link => link.href));
-            console.log(Developer);
             const appInfo = await softwarePage.evaluate(async () => {
               const title =document.querySelector("div.grid_48 h1.grid_44")?.innerText.trim() || "No title";
               const License =document.querySelector("div.grid_15 dd.long span.bold")?.innerText.trim() || "PAID";
