@@ -16,20 +16,24 @@ puppeteer.use(StealthPlugin());
   const allAppsInfo = [];
   const categoryMappings = {
     "Windows Apps": [
-      "https://www.softpedia.com/get/Antivirus/",
+      // "https://www.softpedia.com/get/Antivirus/",
       // "https://www.softpedia.com/get/Authoring-tools/",
       // "https://www.softpedia.com/get/CD-DVD-Tools/",
       // "https://www.softpedia.com/get/Compression-tools/",
       // "https://www.softpedia.com/get/Desktop-Enhancements/",
-     'https://www.softpedia.com/get/File-managers/',
-     'https://www.softpedia.com/get/Gaming-Related/',
-     'https://www.softpedia.com/get/Artificial-Intelligence-Generative-AI/',
-     'https://www.softpedia.com/get/Internet/',
-     'https://www.softpedia.com/get/IPOD-TOOLS/',
-     'https://www.softpedia.com/get/Maps-GPS/',
-     'https://www.softpedia.com/get/Mobile-Phone-Tools/',
-     'https://www.softpedia.com/get/Multimedia/',
-     'https://www.softpedia.com/get/Network-Tools/',
+    //  'https://www.softpedia.com/get/File-managers/',
+    //  'https://www.softpedia.com/get/Gaming-Related/',
+    //  'https://www.softpedia.com/get/Artificial-Intelligence-Generative-AI/',
+    //  'https://www.softpedia.com/get/Internet/',
+    //  'https://www.softpedia.com/get/IPOD-TOOLS/',
+    //  'https://www.softpedia.com/get/Maps-GPS/',
+    //  'https://www.softpedia.com/get/Mobile-Phone-Tools/',
+    //  'https://www.softpedia.com/get/Multimedia/',
+    //  'https://www.softpedia.com/get/Network-Tools/',
+    'https://www.softpedia.com/get/Office-tools/',
+    // 'https://www.softpedia.com/get/Others/',
+    // 'https://www.softpedia.com/get/PORTABLE-SOFTWARE/',
+    // 'https://www.softpedia.com/get/Programming/
   
     ]
   };
